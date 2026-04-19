@@ -1,0 +1,139 @@
+.login-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.login-card {
+  width: min(100%, 420px);
+  padding: 40px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(20, 33, 61, 0.08);
+  box-shadow: 0 24px 80px rgba(20, 33, 61, 0.14);
+  backdrop-filter: blur(16px);
+}
+
+.login-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #fff1d6;
+  color: #9a5d00;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.login-header {
+  margin: 22px 0 28px;
+}
+
+.login-header h1 {
+  margin: 0 0 10px;
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  line-height: 1.05;
+}
+
+.login-header p {
+  margin: 0;
+  color: #5b6475;
+}
+
+.login-form {
+  display: grid;
+  gap: 18px;
+}
+
+.login-field {
+  display: grid;
+  gap: 8px;
+  color: #24324f;
+  font-weight: 500;
+}
+
+.login-field input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #d6deeb;
+  border-radius: 16px;
+  background: #ffffff;
+  color: #14213d;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.login-field input:focus {
+  border-color: #fca311;
+  box-shadow: 0 0 0 4px rgba(252, 163, 17, 0.18);
+  transform: translateY(-1px);
+}
+
+.login-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 0.95rem;
+}
+
+.login-row a,
+.login-footer a {
+  color: #0f4c81;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #5b6475;
+}
+
+.login-check input {
+  accent-color: #fca311;
+}
+
+.login-button {
+  border: 0;
+  border-radius: 18px;
+  padding: 15px 18px;
+  background: linear-gradient(135deg, #14213d 0%, #1f3b73 100%);
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px rgba(20, 33, 61, 0.2);
+}
+
+.login-footer {
+  margin: 22px 0 0;
+  color: #5b6475;
+  text-align: center;
+}
+
+@media (max-width: 520px) {
+  .login-card {
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+
+  .login-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
