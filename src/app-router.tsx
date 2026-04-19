@@ -4,8 +4,9 @@ import { PrivateRoute } from "./routes/private-routes.tsx";
 import { PublicRoute } from "./routes/public-routes.tsx";
 
 const App = lazy(() => import("./App.tsx"));
-const Dashboard = lazy(() => import("./features/dashboard/dashboard.view.tsx"));
-
+const Transactions = lazy(
+  () => import("./features/transactions/Transactions.view.tsx"),
+);
 function GlobalFallback() {
   return (
     <div className="global-suspense">
@@ -26,7 +27,7 @@ export function AppRouter() {
         </Route>
 
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/transactions" element={<Transactions />} />
         </Route>
       </Routes>
     </Suspense>
