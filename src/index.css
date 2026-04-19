@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root {
   font-family: "Poppins", "Segoe UI", sans-serif;
   line-height: 1.5;
@@ -33,4 +35,29 @@ input {
 
 a {
   color: inherit;
+}
+
+.global-suspense {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  color: #14213d;
+}
+
+.global-suspense__spinner {
+  width: 48px;
+  height: 48px;
+  border-radius: 9999px;
+  border: 4px solid rgba(20, 33, 61, 0.15);
+  border-top-color: #fca311;
+  animation: global-spin 0.8s linear infinite;
+}
+
+@keyframes global-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
