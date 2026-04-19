@@ -7,9 +7,14 @@ type AuthState = {
     name: string;
     email: string;
   } | null;
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
-  setAuth: (data: { user: AuthState["user"]; token: string }) => void;
+  setAuth: (data: {
+    user: AuthState["user"];
+    accessToken: string;
+    refreshToken: string;
+  }) => void;
   logout: () => void;
 };
 
@@ -17,14 +22,20 @@ export const useAuthStore = create<AuthState>()(
   persist(
     (set) => ({
       user: null,
-      token: null,
+      accessToken: null,
+      refreshToken: null,
       isAuthenticated: false,
 
-      setAuth: ({ user, token }: { user: AuthState["user"]; token: string }) =>
-        set({ user, token, isAuthenticated: true }),
+      setAuth: ({ user, accessToken, refreshToken }) =>
+        set({ user, accessToken, refreshToken, isAuthenticated: true }),
 
       logout: () => {
-        set({ user: null, token: null, isAuthenticated: false });
+        set({
+          user: null,
+          accessToken: null,
+          refreshToken: null,
+          isAuthenticated: false,
+        });
         useAuthStore.persist.clearStorage();
       },
     }),

@@ -8,7 +8,10 @@ type LoginPayload = {
 type LoginResponse = {
   success: boolean;
   data: {
-    token: string;
+    accessToken: string;
+    refreshToken: string;
+    expiresIn: string;
+    refreshExpiresIn: string;
     user: {
       id: number;
       name: string;

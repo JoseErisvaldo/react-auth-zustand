@@ -8,7 +8,11 @@ export default function useLogin() {
   return useMutation({
     mutationFn: loginService,
     onSuccess: (data) => {
-      setAuth({ user: data.data.user, token: data.data.token });
+      setAuth({
+        user: data.data.user,
+        accessToken: data.data.accessToken,
+        refreshToken: data.data.refreshToken,
+      });
     },
   });
 }
