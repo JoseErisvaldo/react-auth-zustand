@@ -24,6 +24,11 @@ export type TransactionsList = {
   pagination: TransactionsPagination;
 };
 
+export type GetTransactionsParams = {
+  page?: number;
+  limit?: number;
+};
+
 export type PostTransactionResponse = z.infer<
   typeof postTransactionResponseSchema
 >;

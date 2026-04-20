@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Pagination } from "@/components/ui/pagination";
 import { StateMessage } from "@/components/ui/state-message";
 import {
   Table,
@@ -8,10 +9,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useState } from "react";
 import useTransactionsHooks from "../queries/use-transactions-hooks";
 
 export default function TableTransactions() {
-  const { data, isLoading, isError } = useTransactionsHooks();
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const { data, isLoading, isError, isFetching } = useTransactionsHooks({
+    page,
+    limit,
+  });
   const transactions = data?.items ?? [];
   const pagination = data?.pagination;
 
@@ -41,7 +48,7 @@ export default function TableTransactions() {
         <div>
           <h2 className="text-xl font-semibold">Histórico recente</h2>
           <p className="text-sm text-muted-foreground">
-            Consulte as movimentações mais recentes da sua conta.
+            Consulte as movimentacoes mais recentes da sua conta.
           </p>
         </div>
 
@@ -49,6 +56,12 @@ export default function TableTransactions() {
           {pagination?.totalItems ?? transactions.length} itens
         </Badge>
       </div>
+
+      {isFetching && !isLoading && (
+        <p className="text-sm text-muted-foreground">
+          Atualizando pagina {pagination?.page ?? page}...
+        </p>
+      )}
 
       <div className="rounded-lg border bg-card">
         <Table>
@@ -96,9 +109,18 @@ export default function TableTransactions() {
       </div>
 
       {pagination && (
-        <p className="text-sm text-muted-foreground">
-          Pagina {pagination.page} de {pagination.totalPages}.
-        </p>
+        <div className="space-y-3">
+          <div className="text-sm text-muted-foreground">
+            Pagina {pagination.page} de {pagination.totalPages}.
+          </div>
+
+          <Pagination
+            page={pagination.page}
+            totalPages={pagination.totalPages}
+            onPageChange={setPage}
+            disabled={isFetching}
+          />
+        </div>
       )}
     </div>
   );
