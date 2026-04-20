@@ -10,10 +10,12 @@ import { StateMessage } from "@/components/ui/state-message";
 import useTransactionsHooks from "../transactions/queries/use-transactions-hooks";
 
 export default function Dashboard() {
-  const { data = [], isLoading, isError } = useTransactionsHooks();
+  const { data, isLoading, isError } = useTransactionsHooks();
+  const transactions = data?.items ?? [];
+  const pagination = data?.pagination;
 
-  const totalTransactions = data.length;
-  const totalAmount = data.reduce(
+  const totalTransactions = pagination?.totalItems ?? transactions.length;
+  const totalAmount = transactions.reduce(
     (acc, transaction) => acc + Number(transaction.amount || 0),
     0,
   );
@@ -75,7 +77,7 @@ export default function Dashboard() {
             />
           )}
 
-          {!isLoading && !isError && data.length === 0 && (
+          {!isLoading && !isError && transactions.length === 0 && (
             <StateMessage
               variant="empty"
               title="Nenhuma movimentação encontrada"

@@ -11,7 +11,9 @@ import {
 import useTransactionsHooks from "../queries/use-transactions-hooks";
 
 export default function TableTransactions() {
-  const { data = [], isLoading, isError } = useTransactionsHooks();
+  const { data, isLoading, isError } = useTransactionsHooks();
+  const transactions = data?.items ?? [];
+  const pagination = data?.pagination;
 
   if (isLoading) {
     return (
@@ -43,7 +45,9 @@ export default function TableTransactions() {
           </p>
         </div>
 
-        <Badge variant="secondary">{data.length} itens</Badge>
+        <Badge variant="secondary">
+          {pagination?.totalItems ?? transactions.length} itens
+        </Badge>
       </div>
 
       <div className="rounded-lg border bg-card">
@@ -58,7 +62,7 @@ export default function TableTransactions() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.length === 0 ? (
+            {transactions.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={5} className="p-4">
                   <StateMessage
@@ -69,7 +73,7 @@ export default function TableTransactions() {
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((transaction) => (
+              transactions.map((transaction) => (
                 <TableRow key={transaction.id}>
                   <TableCell className="font-medium">
                     #{transaction.id}
@@ -90,6 +94,12 @@ export default function TableTransactions() {
           </TableBody>
         </Table>
       </div>
+
+      {pagination && (
+        <p className="text-sm text-muted-foreground">
+          Pagina {pagination.page} de {pagination.totalPages}.
+        </p>
+      )}
     </div>
   );
 }

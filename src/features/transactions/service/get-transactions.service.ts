@@ -1,17 +1,21 @@
-import type { Transaction } from "../types/transaction.types";
 import { api } from "../../../shared/api/api";
+import { getTransactionsResponseSchema } from "../schema/transaction.schema";
+import type {
+  GetTransactionsResponse,
+  TransactionsList,
+} from "../types/transaction.types";
 
-type TransactionsApiResponse =
-  | Transaction[]
-  | { data?: Transaction[]; transactions?: Transaction[] };
+export default async function getTransactionsService(): Promise<TransactionsList> {
+  const response = await api.get<GetTransactionsResponse>("/transactions", {
+    params: {
+      page: 1,
+      limit: 10,
+      startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      endDate: new Date().toISOString(),
+    },
+  });
 
-export default async function getTransactionsService(): Promise<Transaction[]> {
-  const response = await api.get<TransactionsApiResponse>("/transactions");
-  const payload = response.data;
+  const parsedResponse = getTransactionsResponseSchema.parse(response.data);
 
-  if (Array.isArray(payload)) {
-    return payload;
-  }
-
-  return payload.data ?? payload.transactions ?? [];
+  return parsedResponse.data;
 }

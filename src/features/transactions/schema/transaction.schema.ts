@@ -31,6 +31,21 @@ export const transactionSchema = z.object({
   updatedAt: z.string(),
 });
 
+export const transactionsPaginationSchema = z.object({
+  page: z.number(),
+  limit: z.number(),
+  totalItems: z.number(),
+  totalPages: z.number(),
+});
+
+export const getTransactionsResponseSchema = z.object({
+  success: z.boolean(),
+  data: z.object({
+    items: z.array(transactionSchema),
+    pagination: transactionsPaginationSchema,
+  }),
+});
+
 export const postTransactionResponseSchema = z.object({
   success: z.boolean(),
   data: transactionSchema,

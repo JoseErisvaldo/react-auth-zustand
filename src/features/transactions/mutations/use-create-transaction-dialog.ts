@@ -13,7 +13,9 @@ export function usePostTransaction() {
 
     onSuccess: () => {
       setErrors({});
-      queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({
+        queryKey: ["transactions"],
+      });
     },
 
     onError: (error) => {
