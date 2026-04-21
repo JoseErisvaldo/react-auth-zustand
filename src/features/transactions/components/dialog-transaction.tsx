@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,33 +10,41 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Field, FieldGroup } from "@/components/ui/field";
+import { Field, FieldError, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useEffect, useRef } from "react";
 import { useDialogTransaction } from "../hooks/use-form-dialog-transaction";
 
 export function DialogCreateTransaction() {
-  const { handleSubmit, isPending, errors, isSuccess, reset } =
-    useDialogTransaction();
-  const formRef = useRef<HTMLFormElement>(null);
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (!isSuccess) {
-      return;
+  const {
+    register,
+    handleFormSubmit,
+    errors,
+    isPending,
+    isError,
+    submissionErrorMessage,
+    resetSubmissionState,
+    resetForm,
+  } = useDialogTransaction({
+    onSubmitSuccess: () => {
+      setOpen(false);
+      resetSubmissionState();
+    },
+  });
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      resetSubmissionState();
+      resetForm();
     }
 
-    formRef.current?.reset();
-
-    const timer = setTimeout(() => {
-      reset();
-    }, 4000);
-
-    return () => clearTimeout(timer);
-  }, [isSuccess, reset]);
+    setOpen(nextOpen);
+  };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger
         render={<Button className="bg-green-600 hover:bg-green-700" />}
       >
@@ -43,7 +52,7 @@ export function DialogCreateTransaction() {
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-sm">
-        <form ref={formRef} onSubmit={handleSubmit}>
+        <form onSubmit={handleFormSubmit}>
           <DialogHeader>
             <DialogTitle>Criar Nova Transação</DialogTitle>
             <DialogDescription>
@@ -51,51 +60,72 @@ export function DialogCreateTransaction() {
             </DialogDescription>
           </DialogHeader>
 
+          {isError && (
+            <p className="rounded-md border border-red-300 bg-red-50 px-3 py-2 text-sm text-red-700">
+              {submissionErrorMessage}
+            </p>
+          )}
+
           <FieldGroup>
             <Field>
-              {errors.type && (
-                <p className="text-sm text-red-600">{errors.type}</p>
-              )}
               <Label htmlFor="type">Tipo</Label>
-              <select id="type" name="type" defaultValue="income">
+              <select
+                id="type"
+                aria-invalid={!!errors.type}
+                aria-describedby={errors.type ? "type-error" : undefined}
+                {...register("type")}
+              >
                 <option value="income">Entrada</option>
                 <option value="expense">Saída</option>
               </select>
+              <FieldError id="type-error">{errors.type?.message}</FieldError>
             </Field>
 
             <Field>
-              {errors.category && (
-                <p className="text-sm text-red-600">{errors.category}</p>
-              )}
               <Label htmlFor="category">Categoria</Label>
               <Input
+                {...register("category")}
                 id="category"
-                name="category"
                 placeholder="Ex: Alimentação"
+                aria-invalid={!!errors.category}
+                aria-describedby={
+                  errors.category ? "category-error" : undefined
+                }
               />
+              <FieldError id="category-error">
+                {errors.category?.message}
+              </FieldError>
             </Field>
 
             <Field>
-              {errors.title && (
-                <p className="text-sm text-red-600">{errors.title}</p>
-              )}
               <Label htmlFor="title">Nome</Label>
-              <Input id="title" name="title" />
+              <Input
+                {...register("title")}
+                id="title"
+                aria-invalid={!!errors.title}
+                aria-describedby={errors.title ? "title-error" : undefined}
+              />
+              <FieldError id="title-error">{errors.title?.message}</FieldError>
             </Field>
 
             <Field>
-              {errors.amount && (
-                <p className="text-sm text-red-600">{errors.amount}</p>
-              )}
               <Label htmlFor="amount">Valor</Label>
-              <Input id="amount" name="amount" />
+              <Input
+                {...register("amount", {
+                  valueAsNumber: true,
+                })}
+                id="amount"
+                type="number"
+                step="0.01"
+                min="0"
+                aria-invalid={!!errors.amount}
+                aria-describedby={errors.amount ? "amount-error" : undefined}
+              />
+              <FieldError id="amount-error">
+                {errors.amount?.message}
+              </FieldError>
             </Field>
           </FieldGroup>
-          {isSuccess && (
-            <p className="text-sm text-green-600">
-              Transação criada com sucesso!
-            </p>
-          )}
           <DialogFooter className="mt-4">
             <DialogClose
               render={
@@ -107,8 +137,9 @@ export function DialogCreateTransaction() {
 
             <Button
               type="submit"
-              disabled={isPending}
               className="bg-green-600 hover:bg-green-700"
+              disabled={isPending}
+              aria-busy={isPending}
             >
               {isPending ? "Salvando..." : "Salvar"}
             </Button>

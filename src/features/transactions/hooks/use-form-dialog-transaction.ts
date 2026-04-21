@@ -1,25 +1,61 @@
+import axios from "axios";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { usePostTransaction } from "../mutations/use-create-transaction-dialog";
+import { createTransactionSchema } from "../schema/transaction.schema";
+import type { TransactionDTO } from "../types/transaction.types";
 
-export function useDialogTransaction() {
-  const { mutate, isPending, errors, setErrors, isSuccess, reset } =
-    usePostTransaction();
+type ApiError = {
+  message?: string;
+};
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+const defaultValues: Partial<TransactionDTO> = {
+  type: "income",
+  category: "",
+  title: "",
+};
 
-    setErrors({});
+type UseDialogTransactionOptions = {
+  onSubmitSuccess?: () => void;
+};
 
-    const formData = new FormData(event.currentTarget);
+export function useDialogTransaction(options?: UseDialogTransactionOptions) {
+  const {
+    register,
+    handleSubmit,
+    reset: resetForm,
+    formState: { errors },
+  } = useForm<TransactionDTO>({
+    defaultValues,
+    resolver: zodResolver(createTransactionSchema),
+  });
 
-    const data = {
-      title: formData.get("title") as string,
-      amount: Number(formData.get("amount")),
-      category: formData.get("category") as string,
-      type: formData.get("type") as "income" | "expense",
-    };
+  const { mutate, isPending, isError, error, reset } = usePostTransaction();
 
-    mutate(data);
+  const submissionErrorMessage =
+    (axios.isAxiosError<ApiError>(error)
+      ? error.response?.data?.message
+      : undefined) ??
+    error?.message ??
+    "Nao foi possivel enviar a transacao. Tente novamente.";
+
+  const onSubmit = (data: TransactionDTO) => {
+    mutate(data, {
+      onSuccess: () => {
+        resetForm();
+        options?.onSubmitSuccess?.();
+      },
+    });
   };
 
-  return { handleSubmit, isPending, errors, isSuccess, reset };
+  return {
+    register,
+    errors,
+    isPending,
+    isError,
+    submissionErrorMessage,
+    resetSubmissionState: reset,
+    resetForm,
+    handleFormSubmit: handleSubmit(onSubmit),
+  };
 }
