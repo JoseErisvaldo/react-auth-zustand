@@ -68,6 +68,7 @@ export default function TableTransactions() {
           <TableHeader>
             <TableRow>
               <TableHead>ID</TableHead>
+              <TableHead>Tipo</TableHead>
               <TableHead>Título</TableHead>
               <TableHead>Valor</TableHead>
               <TableHead>Categoria</TableHead>
@@ -90,6 +91,9 @@ export default function TableTransactions() {
                 <TableRow key={transaction.id}>
                   <TableCell className="font-medium">
                     #{transaction.id}
+                  </TableCell>
+                  <TableCell>
+                    {transaction.type === "income" ? "Entrada" : "Saida"}
                   </TableCell>
                   <TableCell>{transaction.title}</TableCell>
                   <TableCell className="font-semibold text-green-900">

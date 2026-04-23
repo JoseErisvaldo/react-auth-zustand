@@ -20,6 +20,12 @@ const badgeLabels = {
   error: "Erro",
 };
 
+const progressClassByVariant = {
+  loading: "w-2/3 bg-green-900",
+  empty: "w-full bg-slate-400",
+  error: "w-full bg-red-700",
+};
+
 export function StateMessage({
   title,
   description,
@@ -33,7 +39,9 @@ export function StateMessage({
             "text-white",
             variant === "error"
               ? "bg-red-700 hover:bg-red-700"
-              : "bg-green-900 hover:bg-green-900",
+              : variant === "loading"
+                ? "bg-green-900 hover:bg-green-900"
+                : "bg-slate-500 hover:bg-slate-500",
           )}
         >
           {badgeLabels[variant]}
@@ -48,7 +56,7 @@ export function StateMessage({
           <div
             className={cn(
               "h-1.5 rounded-full",
-              variant === "error" ? "w-1/3 bg-red-700" : "w-2/3 bg-green-900",
+              progressClassByVariant[variant],
             )}
           />
         </div>

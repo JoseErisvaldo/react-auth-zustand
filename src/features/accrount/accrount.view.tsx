@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Account from "./components/account";
+import Subscriptions from "./components/subscription";
 
 export default function Accrount() {
   return (
@@ -26,8 +27,9 @@ export default function Accrount() {
           </div>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="flex flex-col gap-2">
           <Account />
+          <Subscriptions />
         </CardContent>
       </Card>
     </section>

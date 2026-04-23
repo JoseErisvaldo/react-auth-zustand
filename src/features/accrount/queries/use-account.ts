@@ -11,9 +11,9 @@ export const useAccrount = () => {
   });
 };
 
-export const useSubscription = () => {
+export function useSubscription() {
   return useQuery({
     queryKey: ["subscription"],
     queryFn: getSubscriptionsService,
   });
-};
+}
