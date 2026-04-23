@@ -45,13 +45,6 @@ export default function TableTransactions() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold">Histórico recente</h2>
-          <p className="text-sm text-muted-foreground">
-            Consulte as movimentacoes mais recentes da sua conta.
-          </p>
-        </div>
-
         <Badge variant="secondary">
           {pagination?.totalItems ?? transactions.length} itens
         </Badge>
