@@ -1,4 +1,4 @@
-export type ProfileResponse = {
+export type AccrountResponse = {
   success: boolean;
   data: {
     id: number;

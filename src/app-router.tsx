@@ -4,7 +4,7 @@ import RouteFallback from "./components/route-fallback";
 import { useAuthStore } from "./features/auth/store/auth.store";
 import { PrivateRoute } from "./routes/private-routes.tsx";
 import { PublicRoute } from "./routes/public-routes.tsx";
-import Profile from "./features/profile/profile.view.tsx";
+import Accrount from "./features/accrount/accrount.view.tsx";
 
 const App = lazy(() => import("./App"));
 const Dashboard = lazy(() => import("./features/dashboard/dashboard.view"));
@@ -53,10 +53,10 @@ export function AppRouter() {
           }
         />
         <Route
-          path="/profile"
+          path="/accrount"
           element={
             <Suspense fallback={<RouteFallback />}>
-              <Profile />
+              <Accrount />
             </Suspense>
           }
         />

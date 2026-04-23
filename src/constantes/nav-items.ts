@@ -8,8 +8,8 @@ const navItems = [
     to: "/transactions",
   },
   {
-    name: "Perfil",
-    to: "/profile",
+    name: "Conta",
+    to: "/accrount",
   },
 ];
 
