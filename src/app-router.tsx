@@ -11,6 +11,10 @@ const Dashboard = lazy(() => import("./features/dashboard/dashboard.view"));
 const Transactions = lazy(
   () => import("./features/transactions/transactions.view"),
 );
+const SubscriptionProductsView = lazy(
+  () =>
+    import("./features/subscriptions-products/subscriptions-products.view.tsx"),
+);
 
 export function AppRouter() {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -18,7 +22,6 @@ export function AppRouter() {
   return (
     <Routes>
       <Route
-        path="/"
         element={
           <Navigate to={isAuthenticated ? "/dashboard" : "/login"} replace />
         }
@@ -33,25 +36,19 @@ export function AppRouter() {
             </Suspense>
           }
         />
+        <Route
+          path="/"
+          element={
+            <Suspense fallback={<RouteFallback fullPage />}>
+              <SubscriptionProductsView />
+            </Suspense>
+          }
+        />
       </Route>
 
       <Route element={<PrivateRoute />}>
-        <Route
-          path="/transactions"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <Transactions />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <Suspense fallback={<RouteFallback />}>
-              <Dashboard />
-            </Suspense>
-          }
-        />
+        <Route path="/transactions" element={<Transactions />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/accrount"
           element={
