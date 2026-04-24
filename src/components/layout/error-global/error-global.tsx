@@ -26,7 +26,10 @@ export function GlobalError({
       </div>
 
       <div className="flex gap-3">
-        <Button onClick={onRetry} className="flex items-center gap-2">
+        <Button
+          onClick={onRetry}
+          className="flex items-center gap-2 bg-green-600"
+        >
           <RefreshCcw className="h-4 w-4" />
           Tentar novamente
         </Button>
